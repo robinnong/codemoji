@@ -41,7 +41,7 @@ class App extends Component {
           <div className="App">
             <div className="wrapper">
               <header>
-                <h1>Codenames <i class="fas fa-meteor"></i></h1>
+                <h1>Codenames <i className="fas fa-meteor"></i></h1>
                 <Link className="rulesLink" to="/rules">The Rules</Link> 
               </header>
               <main> 
