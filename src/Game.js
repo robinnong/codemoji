@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'; 
 import { CSSTransition, TransitionGroup } from 'react-transition-group'; 
-import Card from './Card';
+import Card from './Card'; 
 import swal from 'sweetalert';
+import ChatBox from './ChatBox';
+// Need to import axios
 
 const Game = (props) => {    
     const [turn, setTurn] = useState(true);
@@ -79,56 +81,59 @@ const Game = (props) => {
                                 classNames={"cardTransition"}  
                                 onExit={shuffleCards}
                             >
-                                <Card
-                                    key={index}
-                                    word={word.word}
-                                    hidden={word.reveal}
-                                    type={word.type}
-                                    show={() => revealType(word.word)} 
-                                />
+                            <Card
+                                key={index}
+                                word={word.word}
+                                hidden={word.reveal}
+                                type={word.type}
+                                show={() => revealType(word.word)} 
+                            />
                             </CSSTransition>
                         )
                     })} 
-                    </ul>
-                <div className="teamBoard">
-                    <div>
-                        <button class="secretCodes" onClick={toggleCodes}>Secret Codes</button>
-                        <h3>Red Team</h3>
-                        <h4>Score: {redCounter}</h4>
-                        <ul className="redTeam">
-                            <li className="spymaster">
-                                <i class="fas fa-user-secret"></i>
-                                <p>player 1</p>
-                            </li>
-                            <li>
-                                <i class="fas fa-user"></i>
-                                <p>player 2</p>
-                            </li>
-                            <li>
-                                <i class="fas fa-user"></i>
-                                <p>player 3</p>
-                            </li>
-                        </ul>
+                </ul>
+                <aside>
+                    <div className="teamBoard">
+                        <div>
+                            <button class="secretCodes" onClick={toggleCodes}>Secret Codes</button>
+                            <h3>Lunar Team</h3>
+                            <h4>Score: {redCounter}</h4>
+                            <ul className="redTeam">
+                                <li className="spymaster">
+                                    <span>😎</span>
+                                    <p>player 1</p>
+                                </li>
+                                <li>
+                                    <span>🥱</span>
+                                    <p>player 2</p>
+                                </li>
+                                <li>
+                                    <span>🤪</span>
+                                    <p>player 3</p>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3>Solar Team</h3>
+                            <h4>Score: {blueCounter}</h4>
+                            <ul className="blueTeam">
+                                <li className="spymaster">
+                                    <i class="fas fa-user-secret"></i>
+                                    <p>player 1</p>
+                                </li>
+                                <li>
+                                    <i class="fas fa-user"></i>
+                                    <p>player 2</p>
+                                </li>
+                                <li>
+                                    <i class="fas fa-user"></i>
+                                    <p>player 3</p>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <div>
-                        <h3>Blue Team</h3>
-                        <h4>Score: {blueCounter}</h4>
-                        <ul className="blueTeam">
-                            <li className="spymaster">
-                                <i class="fas fa-user-secret"></i>
-                                <p>player 1</p>
-                            </li>
-                            <li>
-                                <i class="fas fa-user"></i>
-                                <p>player 2</p>
-                            </li>
-                            <li>
-                                <i class="fas fa-user"></i>
-                                <p>player 3</p>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                <ChatBox />
+                </aside>
             </div>
         </>
     )
