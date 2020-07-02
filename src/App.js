@@ -1,11 +1,15 @@
 import React, { Component } from 'react'; 
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+
+// Components
 import Home from './Home';
 import Rules from './Rules';
 import Game from './Game';
 import Words from './Words';
+// Styles
 import './App.css'; 
 
+// Write a function that connects to the client when user has entered the room
 class App extends Component {
   constructor () {
     super();

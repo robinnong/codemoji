@@ -1,18 +1,23 @@
+// Dependencies
 import React, { useState, useEffect } from 'react'; 
-import { CSSTransition, TransitionGroup } from 'react-transition-group'; 
-import Card from './Card'; 
+import { CSSTransition } from 'react-transition-group'; 
 import swal from 'sweetalert';
-import ChatBox from './ChatBox';
 // Need to import axios
 
+// Components
+import Card from './Card'; 
+import ChatBox from './ChatBox';
+import ScoreBoard from './ScoreBoard';
+
 const Game = (props) => {    
+    const [loadClient, setLoadClient] = useState(true);
     const [turn, setTurn] = useState(true);
     const [round, setRound] = useState(1);
     const [wordsArray, setWords] = useState(props.cards);
     const [counter, setCounter] = useState(0);
     const [redCounter, setRedCounter] = useState(0);
     const [blueCounter, setBlueCounter] = useState(0);
-    const [shuffle, shuffleOn] = useState(false)
+    const [shuffle, shuffleOn] = useState(false);
 
     useEffect(() => {
         if (counter % 2 === 0 && counter !== 0) { 
@@ -62,9 +67,18 @@ const Game = (props) => {
 
     return(
         <>
+            {/* LOAD OR UNLOAD THE CLIENT */}
+            <button onClick={() => setLoadClient(prevState => !prevState)}>
+                STOP CLIENT
+            </button>
+            {/* SOCKET IO CLIENT*/}
             <p>Round: {round}</p> 
+            <ScoreBoard 
+            redCounter={redCounter}
+            blueCounter={blueCounter}
+            />
             <div className="statusBar">
-                <h2><i class="far fa-star" aria-hidden="true"></i><span>{turn ? "Red" : "Blue"} Teams's Turn</span></h2>
+                <h2><i className="far fa-star" aria-hidden="true"></i><span>{turn ? "Red" : "Blue"} Teams's Turn</span></h2>
                 <div>
                     <button type="button" className="endTurnButton" onClick={() => { setTurn(!turn); setCounter(counter + 1) }}>End Turn</button>
                     <button type="button" className="shuffleButton" onClick={shuffleCards}>Shuffle</button>
@@ -95,44 +109,42 @@ const Game = (props) => {
                 <aside>
                     <div className="teamBoard">
                         <div>
-                            <button class="secretCodes" onClick={toggleCodes}>Secret Codes</button>
-                            <h3>Lunar Team</h3>
-                            <h4>Score: {redCounter}</h4>
+                            <button className="secretCodes" onClick={toggleCodes}>Secret Codes</button>
+                            <h3>Lunar Team</h3> 
                             <ul className="redTeam">
                                 <li className="spymaster">
-                                    <span>😎</span>
+                                    <span role="img" aria-hidden="true">😎</span>
                                     <p>player 1</p>
                                 </li>
                                 <li>
-                                    <span>🥱</span>
+                                    <span role="img" aria-hidden="true">🥱</span>
                                     <p>player 2</p>
                                 </li>
                                 <li>
-                                    <span>🤪</span>
+                                    <span role="img" aria-hidden="true">🤪</span>
                                     <p>player 3</p>
                                 </li>
                             </ul>
                         </div>
                         <div>
-                            <h3>Solar Team</h3>
-                            <h4>Score: {blueCounter}</h4>
+                            <h3>Solar Team</h3> 
                             <ul className="blueTeam">
                                 <li className="spymaster">
-                                    <i class="fas fa-user-secret"></i>
+                                    <i className="fas fa-user-secret"></i>
                                     <p>player 1</p>
                                 </li>
                                 <li>
-                                    <i class="fas fa-user"></i>
+                                    <i className="fas fa-user"></i>
                                     <p>player 2</p>
                                 </li>
                                 <li>
-                                    <i class="fas fa-user"></i>
+                                    <i className="fas fa-user"></i>
                                     <p>player 3</p>
                                 </li>
                             </ul>
                         </div>
                     </div>
-                <ChatBox />
+                    {loadClient ? <ChatBox /> : null}
                 </aside>
             </div>
         </>

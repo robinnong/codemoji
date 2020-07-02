@@ -1,45 +1,64 @@
-import React, { useState, useEffect } from 'react'; 
+import React, { useState, useEffect, useRef } from 'react';   
+import socketIOClient from "socket.io-client";
+const ENDPOINT = "http://127.0.0.1:4001"; 
+const socket = socketIOClient(ENDPOINT);
 
-const ChatBox = () => {
+const ChatBox = () => { 
     const [userInput, setInput] = useState("");
-    const [messageLog, setMessageLog] = useState(["[Robin] Hi this is a test message", "[Kathy] This is a test too, a REALLY LONG MESSAGE THAT IS TOO LONG FOR THE BOX. What will it look like??? 🙂😫"]);
+    const [messageLog, setMessageLog] = useState([]); 
 
-    const sendMessage = (e) => {
-        e.preventDefault()
-        // use state to always be listening to the input on change
-        // Message cannot be blank
-        if (userInput != "") {
-            console.log("Message Sent");
-            // Append message to the chat! 
+    useEffect(() => { 
+        // Disconnect from the server when the chatBox component un-mounts
+        return () => socket.disconnect();
+    }, []);
+
+    // Scroll chat box to the bottom whenever a new message appears
+    const scrollToBottom = () => messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    // Whenever the message log updates, auto scroll chat to the bottom
+    useEffect(scrollToBottom, [messageLog]);
+
+    // Append new messages to the chat! 
+    useEffect(() => {
+        socket.on('receive message', data => { 
             let copyMessages = [...messageLog];
-            copyMessages.push(userInput);
-            setMessageLog(copyMessages);
-        }
-        // Clears the input field
-        setInput("")
-    }
+            copyMessages.push(data);
+            setMessageLog(copyMessages);  
+        });
+    });
 
-    // Sets the input field state on each input change
-    const handleUserInput = (e) => {  
-        console.log(e.target.value)
-        setInput(e.target.value); 
+    // Sends valid text messages to the server
+    const sendMessage = (e) => {
+        e.preventDefault() 
+        // Message cannot be blank
+        if (userInput !== "") {
+            console.log('emitting new message'); 
+            socket.emit('new message', userInput); 
+        } 
+        // Clears the input field
+        setInput("");
     } 
 
+    // Sets the input field state on each input change
+    const handleUserInput = (e) => setInput(e.target.value); 
+
+    const messagesEndRef = useRef(null);
+
     return(
-        <div className="chatBox">
-            <div className="messagesContainer"> 
+        <div className="chatWindow">
+            <div className="messagesContainer">  
                 {messageLog.map((text, index) => {
                     return ( 
                         <p key={index}>{text}</p>
                     )
                 })} 
+                <div ref={messagesEndRef} />  
             </div>
             <form action="" onSubmit={sendMessage}>
                 <input type="text" onChange={handleUserInput} value={userInput} placeholder="Type message here and press enter to submit"/>
-                <button type="submit">
-                    <i className="fas fa-paper-plane"></i>
+                <button type="submit" aria-label="Submit">
+                    <i className="fas fa-paper-plane" aria-hidden="true"></i>
                 </button>
-            </form>
+            </form> 
         </div>
     )
 }
