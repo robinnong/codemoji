@@ -108,30 +108,48 @@ main {
   padding: 20px 0; 
 }
 
-.home {
-  height: 100%;
+.home,
+.codeSubmit { 
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
 
-.gameLink {   
-  letter-spacing: 0.2rem;
+.codeSubmit input,
+.gameLink {
+  text-align: center;
   padding: 10px 20px; 
   border-radius: 5px;
   border: 1px solid rgb(99, 90, 230);
   font-size: 2.2rem;
   color: rgb(181, 176, 255);
   margin-bottom: 20px;
+  background-color: transparent;
+}
+
+.gameLink {   
+  letter-spacing: 0.2rem;
   animation: glow 2.8s linear alternate infinite;
+}
+
+.codeSubmit input { 
+  letter-spacing: 0.3rem;
+  width: 230px; 
+  caret-color: white;
+  text-shadow: 0px 0px 10px rgb(237, 236, 255);  
+}
+
+.codeSubmit input:focus {
+  box-shadow: 0 0 10px 3px rgba(99, 90, 230, 0.651);
 }
 
 .home button {
   color: rgb(197, 197, 197);
   border: none;
-  border-bottom: 1px solid purple;
+  border-bottom: 1px solid purple; 
 }
+
 
 @keyframes glow {
   from {
